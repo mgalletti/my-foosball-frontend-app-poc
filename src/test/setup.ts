@@ -7,7 +7,7 @@ globalThis.fetch = vi.fn();
 // Mock import.meta.env
 Object.defineProperty(import.meta, 'env', {
   value: {
-    VITE_API_BASE_URL: 'http://localhost:3000/api',
+    VITE_API_BASE_URL: 'http://localhost:3000',
   },
   writable: true,
 });

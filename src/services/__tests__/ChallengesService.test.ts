@@ -57,7 +57,7 @@ describe('ChallengesService', () => {
       const result = await ChallengesService.getChallenges();
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3000/api/challenges',
+        'http://localhost:3000/challenges',
         expect.objectContaining({
           headers: { 'Content-Type': 'application/json' },
         }),
@@ -98,7 +98,7 @@ describe('ChallengesService', () => {
       const result = await ChallengesService.createChallenge(validRequest);
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3000/api/challenges',
+        'http://localhost:3000/challenges',
         expect.objectContaining({
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -160,7 +160,7 @@ describe('ChallengesService', () => {
       const result = await ChallengesService.joinChallenge('1', 'player1');
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3000/api/challenges/1/join',
+        'http://localhost:3000/challenges/1/join',
         expect.objectContaining({
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -244,7 +244,7 @@ describe('ChallengesService', () => {
       const result = await ChallengesService.getChallengeById('1');
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3000/api/challenges/1',
+        'http://localhost:3000/challenges/1',
         expect.objectContaining({
           headers: { 'Content-Type': 'application/json' },
         }),

@@ -45,7 +45,7 @@ describe('PlayersService', () => {
       const result = await PlayersService.getCurrentPlayer();
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3000/api/players/me',
+        'http://localhost:3000/players/me',
         expect.objectContaining({
           headers: { 'Content-Type': 'application/json' },
         }),
@@ -97,7 +97,7 @@ describe('PlayersService', () => {
       const result = await PlayersService.updatePlayer(validUpdate);
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3000/api/players/me',
+        'http://localhost:3000/players/me',
         expect.objectContaining({
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -161,7 +161,7 @@ describe('PlayersService', () => {
       const result = await PlayersService.updatePlayer(partialUpdate);
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3000/api/players/me',
+        'http://localhost:3000/players/me',
         expect.objectContaining({
           method: 'PUT',
           body: JSON.stringify(partialUpdate),
@@ -192,7 +192,7 @@ describe('PlayersService', () => {
       const result = await PlayersService.getPlayerById('1');
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3000/api/players/1',
+        'http://localhost:3000/players/1',
         expect.objectContaining({
           headers: { 'Content-Type': 'application/json' },
         }),
@@ -230,7 +230,7 @@ describe('PlayersService', () => {
       const result = await PlayersService.getPlayersByExpertise('Expert');
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3000/api/players?expertise=Expert',
+        'http://localhost:3000/players?expertise=Expert',
         expect.objectContaining({
           headers: { 'Content-Type': 'application/json' },
         }),
@@ -269,7 +269,7 @@ describe('PlayersService', () => {
       const result = await PlayersService.getTopPlayers();
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3000/api/players/top?limit=10',
+        'http://localhost:3000/players/top?limit=10',
         expect.objectContaining({
           headers: { 'Content-Type': 'application/json' },
         }),
@@ -286,7 +286,7 @@ describe('PlayersService', () => {
       const result = await PlayersService.getTopPlayers(5);
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3000/api/players/top?limit=5',
+        'http://localhost:3000/players/top?limit=5',
         expect.objectContaining({
           headers: { 'Content-Type': 'application/json' },
         }),
@@ -321,7 +321,7 @@ describe('PlayersService', () => {
       const result = await PlayersService.updatePlayerPoints('1', 50);
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3000/api/players/1/points',
+        'http://localhost:3000/players/1/points',
         expect.objectContaining({
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -364,7 +364,7 @@ describe('PlayersService', () => {
       const result = await PlayersService.updatePlayerExpertise('1', 'Expert');
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3000/api/players/1/expertise',
+        'http://localhost:3000/players/1/expertise',
         expect.objectContaining({
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

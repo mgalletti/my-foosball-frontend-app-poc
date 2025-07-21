@@ -33,13 +33,13 @@ describe('PlacesService', () => {
     it('should fetch all places successfully', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: () => Promise.resolve(mockPlaces),
+        json: () => Promise.resolve({ places: mockPlaces }),
       });
 
       const result = await PlacesService.getPlaces();
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3000/api/places',
+        'http://localhost:3000/places',
         expect.objectContaining({
           headers: { 'Content-Type': 'application/json' },
         }),
@@ -84,7 +84,7 @@ describe('PlacesService', () => {
       const result = await PlacesService.getPlaceById('1');
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3000/api/places/1',
+        'http://localhost:3000/places/1',
         expect.objectContaining({
           headers: { 'Content-Type': 'application/json' },
         }),
@@ -115,7 +115,7 @@ describe('PlacesService', () => {
     it('should filter places by status', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: () => Promise.resolve(mockPlaces),
+        json: () => Promise.resolve({ places: mockPlaces }),
       });
 
       const result = await PlacesService.getPlacesByStatus('1');
@@ -136,7 +136,7 @@ describe('PlacesService', () => {
     it('should return only active places', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: () => Promise.resolve(mockPlaces),
+        json: () => Promise.resolve({ places: mockPlaces }),
       });
 
       const result = await PlacesService.getActivePlaces();

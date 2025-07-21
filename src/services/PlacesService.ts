@@ -1,10 +1,20 @@
-import type { Place } from '../types';
+import type { Place, GetPlacesResponse } from '../types';
 import { BaseApiService } from './api';
 
 // TODO: Re-enable lint violation when logging in catches is properly implemented
 /* eslint-disable no-useless-catch */
 
 // Type guards for response validation
+const isPlaces = (data: any): data is GetPlacesResponse => {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    data.places !== null &&
+    data.places instanceof Array &&
+    (data.places.length > 0 ? isPlace(data.places[0]) : true)
+  );
+};
+
 const isPlace = (data: any): data is Place => {
   return (
     typeof data === 'object' &&
@@ -18,10 +28,6 @@ const isPlace = (data: any): data is Place => {
   );
 };
 
-const isPlaceArray = (data: any): data is Place[] => {
-  return Array.isArray(data) && data.every(isPlace);
-};
-
 export class PlacesService extends BaseApiService {
   /**
    * Fetch all available places from the /places endpoint
@@ -30,8 +36,9 @@ export class PlacesService extends BaseApiService {
    */
   static async getPlaces(): Promise<Place[]> {
     try {
-      const data = await this.request<Place[]>('/places');
-      return this.validateResponse(data, isPlaceArray);
+      const data = await this.request<GetPlacesResponse>('/places');
+      const response = this.validateResponse(data, isPlaces);
+      return response.places;
     } catch (error) {
       throw error;
     }

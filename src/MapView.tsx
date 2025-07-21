@@ -26,7 +26,7 @@ export default function MapView() {
   }, []);
 
   return (
-    <Box sx={{ height: '100vh', width: '100vw', p: 1, bgcolor: 'background.default' }}>
+    <Box sx={{ height: '100vh', width: '100vw', p: 1 }}>
       <Paper elevation={3} sx={{ mb: 2, p: 1, textAlign: 'center' }}>
         <Typography variant="h6">Find Places</Typography>
       </Paper>

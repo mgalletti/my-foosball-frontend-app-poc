@@ -50,6 +50,10 @@ export interface UpdatePlayerRequest {
   points?: number;
 }
 
+export interface GetPlacesResponse {
+  places: Place[];
+}
+
 export interface ApiResponse<T> {
   data: T;
   success: boolean;
