@@ -77,7 +77,8 @@ export interface ApiError {
 
 // Navigation State Types
 
-export type AppSection = 'home' | 'profile' | 'places' | 'challenges';
+export type AppSection = 'home' | 'places' | 'challenges' | 'profile';
+export const sections: AppSection[] = ['home', 'places', 'challenges', 'profile'];
 
 export interface NavigationState {
   currentSection: AppSection;

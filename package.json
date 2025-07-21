@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "release": "run-s clean 'test -- --run' format lint build && echo '\\033[1;32m\n😎 All clear and good to go!\\033[0m'",
+    "release": "run-s clean 'test -- --run' format lint build && echo '\\033[1;32m\n🚀 All clear and good to go!\\033[0m'",
     "type-check": "tsc --noEmit --strict",
     "lint": "eslint \"src/**/*.ts\"",
     "lint:fix": "eslint \"src/**/*.ts\" --fix",
@@ -22,6 +22,7 @@
   "dependencies": {
     "@types/leaflet": "^1.9.20",
     "leaflet": "^1.9.4",
+    "lucide-react": "^0.525.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-leaflet": "^5.0.0"
@@ -35,6 +36,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^30.0.0",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",
