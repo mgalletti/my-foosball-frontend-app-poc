@@ -68,7 +68,7 @@ export default function MobileLayout({
   return (
     <Box sx={{
       pb: 7,
-      minHeight: '100vh',
+      height: '100vh',
       display: 'flex',
       flexDirection: 'column'
     }}>
@@ -77,9 +77,7 @@ export default function MobileLayout({
         position="static"
         sx={{
           zIndex: 1100,
-          width: '100vw',
-          marginLeft: 'calc(-50vw + 50%)',
-          marginRight: 'calc(-50vw + 50%)'
+          width: '100%'
         }}
       >
         <Toolbar sx={{ minHeight: { xs: 56, sm: 64 } }}>

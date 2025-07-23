@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug App</title>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script>
+        // Simple test to see if the app loads
+        console.log('Debug page loaded');
+
+        // Test if we can reach the API
+        fetch('http://localhost:3000/places')
+            .then(response => {
+                console.log('API Response status:', response.status);
+                return response.json();
+            })
+            .then(data => {
+                console.log('API Data:', data);
+            })
+            .catch(error => {
+                console.error('API Error:', error);
+            });
+    </script>
+</body>
+
+</html>
