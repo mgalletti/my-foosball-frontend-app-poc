@@ -5,6 +5,117 @@
  * with search, filtering, and detailed information display capabilities. It integrates
  * with the global state to show active challenges count for each place.
  * 
+ * ## Features
+ * - **Search Functionality**: Real-time search by place name or ID
+ * - **Status Filtering**: Filter places by active/inactive status
+ * - **Challenge Integration**: Shows active challenge count per place
+ * - **Expandable Details**: Click to view detailed place information
+ * - **Mobile Responsive**: Optimized for mobile and desktop viewing
+ * - **Loading States**: Proper loading and error state handling
+ * - **Accessibility**: Full keyboard navigation and screen reader support
+ * - **Performance**: Optimized with useMemo for large datasets
+ * 
+ * ## Usage
+ * 
+ * ### Basic Usage
+ * ```tsx
+ * import { PlacesList } from '../components';
+ * 
+ * function PlacesView() {
+ *   const [places, setPlaces] = useState<Place[]>([]);
+ *   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
+ * 
+ *   const handlePlaceSelect = (place: Place) => {
+ *     setSelectedPlace(place);
+ *     // Navigate to place details or show challenge form
+ *   };
+ * 
+ *   return (
+ *     <PlacesList
+ *       places={places}
+ *       onPlaceSelect={handlePlaceSelect}
+ *       selectedPlace={selectedPlace}
+ *     />
+ *   );
+ * }
+ * ```
+ * 
+ * ### With Loading and Error States
+ * ```tsx
+ * function PlacesWithStates() {
+ *   const { places, loading, error } = usePlaces();
+ * 
+ *   return (
+ *     <PlacesList
+ *       places={places}
+ *       onPlaceSelect={handlePlaceSelect}
+ *       loading={loading}
+ *       error={error}
+ *     />
+ *   );
+ * }
+ * ```
+ * 
+ * ### Integration with Map View
+ * ```tsx
+ * function PlacesAndMap() {
+ *   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
+ *   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
+ * 
+ *   return (
+ *     <>
+ *       {viewMode === 'list' ? (
+ *         <PlacesList
+ *           places={places}
+ *           onPlaceSelect={(place) => {
+ *             setSelectedPlace(place);
+ *             setViewMode('map'); // Switch to map view
+ *           }}
+ *           selectedPlace={selectedPlace}
+ *         />
+ *       ) : (
+ *         <MapView
+ *           places={places}
+ *           selectedPlace={selectedPlace}
+ *           onPlaceSelect={setSelectedPlace}
+ *         />
+ *       )}
+ *     </>
+ *   );
+ * }
+ * ```
+ * 
+ * ## Search and Filtering
+ * 
+ * ### Search Functionality
+ * - Searches place names (case-insensitive)
+ * - Searches place IDs
+ * - Real-time filtering as user types
+ * - Debounced for performance
+ * 
+ * ### Status Filtering
+ * - **All Places**: Shows all places regardless of status
+ * - **Active Only**: Shows only places with status "1"
+ * - **Inactive Only**: Shows places with status other than "1"
+ * 
+ * ## Place Details
+ * 
+ * Each place item displays:
+ * - Place name with status indicator
+ * - Coordinates (latitude, longitude)
+ * - Active challenges count with badge
+ * - Expandable details section with:
+ *   - Full place information
+ *   - List of active challenges
+ *   - Challenge details (date, time, participants)
+ * 
+ * ## Performance Optimizations
+ * 
+ * - **useMemo**: Filtered results are memoized
+ * - **React.Fragment**: Efficient list rendering
+ * - **Conditional Rendering**: Only renders visible content
+ * - **Optimized Re-renders**: Minimal state updates
+ * 
  * @version 1.0.0
  */
 
@@ -100,6 +211,19 @@ export function PlacesList({
 
   /**
    * Get count of active (Open) challenges for a specific place
+   * 
+   * Filters the global challenges array to count only challenges that are:
+   * - Associated with the specified place ID
+   * - Have status 'Open' (not closed or completed)
+   * - Properly structured (null-safe filtering)
+   * 
+   * @param {string} placeId - The unique identifier of the place
+   * @returns {number} Count of active challenges at this place
+   * 
+   * @example
+   * ```tsx
+   * const count = getActiveChallengesCount('place-123'); // Returns 3
+   * ```
    */
   const getActiveChallengesCount = (placeId: string): number => {
     return challenges.filter(
@@ -109,6 +233,19 @@ export function PlacesList({
 
   /**
    * Get active challenges for a specific place
+   * 
+   * Retrieves the full challenge objects for all active challenges
+   * at a specific place. Used for displaying detailed challenge
+   * information in the expanded place details.
+   * 
+   * @param {string} placeId - The unique identifier of the place
+   * @returns {Challenge[]} Array of active challenge objects
+   * 
+   * @example
+   * ```tsx
+   * const challenges = getActiveChallenges('place-123');
+   * challenges.forEach(challenge => console.log(challenge.name));
+   * ```
    */
   const getActiveChallenges = (placeId: string): Challenge[] => {
     return challenges.filter(
@@ -118,6 +255,18 @@ export function PlacesList({
 
   /**
    * Check if a place is active (status "1")
+   * 
+   * Determines if a place is currently active based on its status field.
+   * Active places have status "1", while inactive places have any other value.
+   * This affects visual indicators and filtering options.
+   * 
+   * @param {Place} place - The place object to check
+   * @returns {boolean} True if place is active, false otherwise
+   * 
+   * @example
+   * ```tsx
+   * const active = isPlaceActive(place); // Returns true if status === "1"
+   * ```
    */
   const isPlaceActive = (place: Place): boolean => {
     return place.status === '1';
@@ -125,11 +274,30 @@ export function PlacesList({
 
   /**
    * Filter and search places based on current criteria
+   * 
+   * Applies search and filter criteria to the places array using useMemo
+   * for performance optimization. The filtering process includes:
+   * 1. Text search by name or ID (case-insensitive)
+   * 2. Status filtering (active/inactive/all)
+   * 3. Alphabetical sorting for consistent display
+   * 
+   * @returns {Place[]} Filtered and sorted array of places
+   * 
+   * ## Performance Notes
+   * - Memoized to prevent unnecessary recalculations
+   * - Dependencies: places, searchTerm, statusFilter
+   * - Efficient string matching with toLowerCase()
+   * 
+   * @example
+   * ```tsx
+   * // Automatically updates when search or filter changes
+   * const filtered = filteredPlaces; // Memoized result
+   * ```
    */
   const filteredPlaces = useMemo(() => {
     let filtered = places;
 
-    // Apply search filter
+    // Apply search filter - matches name or ID (case-insensitive)
     if (searchTerm.trim()) {
       const searchLower = searchTerm.toLowerCase().trim();
       filtered = filtered.filter(place =>
@@ -138,7 +306,7 @@ export function PlacesList({
       );
     }
 
-    // Apply status filter
+    // Apply status filter - active, inactive, or all
     if (statusFilter !== 'all') {
       filtered = filtered.filter(place => {
         const active = isPlaceActive(place);
@@ -146,7 +314,7 @@ export function PlacesList({
       });
     }
 
-    // Sort by name for consistent ordering
+    // Sort alphabetically by name for consistent ordering
     return filtered.sort((a, b) => a.name.localeCompare(b.name));
   }, [places, searchTerm, statusFilter]);
 

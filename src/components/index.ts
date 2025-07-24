@@ -12,7 +12,9 @@ export { default as MobileLayout } from './MobileLayout';
 
 // Feature Components
 export { default as PlacesList } from './PlacesList';
+export { default as ChallengeForm } from './ChallengeForm';
 
 // Re-export component types for convenience
 export type { PlacesListProps } from './PlacesList';
+export type { ChallengeFormProps } from './ChallengeForm';
 export type { MobileLayoutProps } from './MobileLayout';
