@@ -185,8 +185,3 @@ export interface PlayerProfileProps {
   player: Player;
   onUpdateProfile: (updates: Partial<Player>) => void;
 }
-
-export interface MobileLayoutProps {
-  children: React.ReactNode;
-  currentSection: AppSection;
-}

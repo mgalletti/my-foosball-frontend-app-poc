@@ -6,7 +6,7 @@ import './index.css'
 import MapView from './MapView.tsx'
 import MobileLayout from './components/MobileLayout.tsx'
 import { AppProvider } from './context/AppContext'
-// import { PlaceList } from './components/Places'
+
 
 // Create a theme for consistent Material-UI rendering
 const theme = createTheme({

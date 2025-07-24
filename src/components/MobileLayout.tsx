@@ -11,8 +11,14 @@
 import { AppBar, Toolbar, Typography, Box, BottomNavigation, BottomNavigationAction, Paper } from '@mui/material';
 import { Home, MapPin, Trophy, User } from 'lucide-react';
 import { useNavigation } from '../context/AppContext';
-import type { MobileLayoutProps, AppSection } from '../types';
+import type { AppSection } from '../types';
 import { sections } from '../types';
+
+export interface MobileLayoutProps {
+  children: React.ReactNode;
+  currentSection: AppSection;
+}
+
 
 /**
  * Enhanced Mobile Layout Component
