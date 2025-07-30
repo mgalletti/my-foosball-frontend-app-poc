@@ -151,7 +151,6 @@ import {
   LocationOn as LocationIcon,
   ExpandMore as ExpandMoreIcon,
   ExpandLess as ExpandLessIcon,
-  FilterList as FilterIcon,
   SportsEsports as ChallengeIcon,
   CheckCircle as ActiveIcon,
   Cancel as InactiveIcon

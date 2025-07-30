@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "release": "run-s clean 'test -- --run' format lint build && echo '\\033[1;32m\n🚀 All clear and good to go!\\033[0m'",
+    "release": "run-s clean 'test -- --run' format lint build && echo '\\033[1;32m\nAll clear and good to go! 🚀\\033[0m'",
     "type-check": "tsc --noEmit --strict",
     "lint": "eslint \"src/**/*.ts\"",
     "lint:fix": "eslint \"src/**/*.ts\" --fix",

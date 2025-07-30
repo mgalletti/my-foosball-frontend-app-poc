@@ -7,13 +7,12 @@
  * @version 1.0.0
  */
 
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import ChallengeForm from '../ChallengeForm';
 import { ChallengesService } from '../../services';
-import type { Place, CreateChallengeRequest } from '../../types';
+import type { Place } from '../../types';
 
 // Mock the ChallengesService
 vi.mock('../../services', () => ({
