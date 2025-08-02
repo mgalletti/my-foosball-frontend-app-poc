@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import './index.css'
-import MapView from './MapView.tsx'
+import MapView from './components/MapView.tsx'
 import MobileLayout from './components/MobileLayout.tsx'
 import { AppProvider } from './context/AppContext'
 

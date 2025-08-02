@@ -102,7 +102,7 @@ const defaultProps = {
 };
 
 // Test wrapper with context
-const TestWrapper: React.FC<{ children: React.ReactNode; currentPlayer?: Player | null }> = ({ 
+const TestWrapper: React.FC<{ children: React.ReactNode; currentPlayer?: Player | null }> = ({
   children,
 }) => {
 
@@ -140,7 +140,7 @@ vi.mock('../../context/AppContext', async () => {
 // Custom render function with context
 const renderWithContext = (
   ui: React.ReactElement,
-  { currentPlayer = mockPlayer, ...options } = {}
+  { currentPlayer = mockPlayer, ...options }: { currentPlayer?: Player | null;[key: string]: any } = {}
 ) => {
   mockCurrentPlayer = currentPlayer;
   return render(
@@ -154,6 +154,7 @@ const renderWithContext = (
 describe('ChallengesList', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockCurrentPlayer = mockPlayer; // Reset to default player
   });
 
   afterEach(() => {
@@ -173,7 +174,7 @@ describe('ChallengesList', () => {
 
       // Should show open challenge
       expect(screen.getByText('Friday Night Showdown')).toBeInTheDocument();
-      
+
       // Should not show closed challenge
       expect(screen.queryByText('Closed Challenge')).not.toBeInTheDocument();
     });
@@ -278,7 +279,7 @@ describe('ChallengesList', () => {
         ...mockChallengeWithCurrentPlayer,
         status: 'Open' // Make it open so it shows up
       };
-      
+
       const props = {
         ...defaultProps,
         challenges: [challengeWithCurrentPlayerOpen]
@@ -310,7 +311,7 @@ describe('ChallengesList', () => {
 
     it('should show loading state while joining', async () => {
       const user = userEvent.setup();
-      
+
       // Mock a delayed response
       mockChallengesService.joinChallenge.mockImplementation(
         () => new Promise(resolve => setTimeout(() => resolve(mockOpenChallenge), 100))
@@ -412,7 +413,7 @@ describe('ChallengesList', () => {
 
     it('should prevent multiple simultaneous join attempts', async () => {
       const user = userEvent.setup();
-      
+
       // Mock a delayed response
       mockChallengesService.joinChallenge.mockImplementation(
         () => new Promise(resolve => setTimeout(() => resolve(mockOpenChallenge), 100))
@@ -421,7 +422,7 @@ describe('ChallengesList', () => {
       renderWithContext(<ChallengesList {...defaultProps} />);
 
       const joinButton = screen.getByRole('button', { name: /join challenge/i });
-      
+
       // Click once to start the join process
       await user.click(joinButton);
 
@@ -509,7 +510,7 @@ describe('ChallengesList', () => {
 
       const challengeCard = screen.getByText('Friday Night Showdown').closest('[class*="MuiCard"]');
       expect(challengeCard).toBeInTheDocument();
-      
+
       // Check that the card has rounded corners (borderRadius is applied via CSS classes)
       expect(challengeCard).toHaveClass(/MuiCard/);
     });
@@ -530,7 +531,7 @@ describe('ChallengesList', () => {
       renderWithContext(<ChallengesList {...defaultProps} />);
 
       const challengeCard = screen.getByText('Friday Night Showdown').closest('[class*="MuiCard"]');
-      
+
       // Check that the card exists and has MUI styling
       expect(challengeCard).toBeInTheDocument();
       expect(challengeCard).toHaveClass(/MuiCard/);
@@ -582,7 +583,7 @@ describe('ChallengesList', () => {
 
       // Find avatar by aria-label instead of text to avoid ambiguity
       const avatar = screen.getByLabelText('John Doe (Novice)');
-      
+
       // Hover to show tooltip
       await user.hover(avatar);
 
@@ -621,7 +622,7 @@ describe('ChallengesList', () => {
 
       const statusChips = screen.getAllByText('Open');
       expect(statusChips[0]).toBeInTheDocument();
-      
+
       // Should be a chip component
       expect(statusChips[0].closest('[class*="MuiChip"]')).toBeInTheDocument();
     });
@@ -630,7 +631,7 @@ describe('ChallengesList', () => {
   describe('Error Boundary Integration', () => {
     it('should handle rendering errors gracefully', () => {
       // Mock console.error to avoid noise in test output
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
 
       // Test with empty challenges array instead of bad data
       const propsWithEmptyData = {

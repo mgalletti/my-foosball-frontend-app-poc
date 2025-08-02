@@ -19,7 +19,7 @@
 
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
-import MapView from '../MapView';
+import MapView from '../components/MapView';
 import { AppProvider } from '../context/AppContext';
 import { PlacesService } from '../services/PlacesService';
 import type { Place } from '../types';

@@ -39,7 +39,6 @@ import {
 import type {
   Challenge,
   Player,
-  ChallengesListProps,
   ErrorState
 } from '../types';
 import { ChallengesService } from '../services';
@@ -53,6 +52,12 @@ interface ChallengeCardProps {
   currentPlayer: Player | null;
   onJoinChallenge: (challengeId: string) => Promise<void>;
   isJoining: boolean;
+}
+
+export interface ChallengesListProps {
+  challenges: Challenge[];
+  onJoinChallenge: (challengeId: string) => void;
+  onCreateChallenge: () => void;
 }
 
 /**

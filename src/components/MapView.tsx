@@ -24,9 +24,9 @@ import {
 } from '@mui/material';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import { Icon } from 'leaflet';
-import { usePlaces, useAppState } from './context/AppContext';
-import { PlacesService } from './services/PlacesService';
-import type { Place, MapViewProps } from './types';
+import { usePlaces, useAppState } from '../context/AppContext';
+import { PlacesService } from '../services/PlacesService';
+import type { Place } from '../types';
 
 /**
  * Creates a custom Leaflet icon for place markers with mobile-optimized sizing
@@ -64,6 +64,12 @@ const MapEventHandler = memo(({ onMapClick }: { onMapClick: () => void }) => {
   });
   return null;
 });
+
+export interface MapViewProps {
+  places: Place[];
+  onPlaceSelect: (place: Place) => void;
+  selectedPlace?: Place;
+}
 
 /**
  * Props interface for the MapView component extending the base MapViewProps

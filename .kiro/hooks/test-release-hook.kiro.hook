@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "name": "Test Release Hook",
+  "description": "Automatically runs npm run release whenever a new test file is created",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "src/**/*.test.tsx",
+      "src/**/*.test.ts",
+      "src/**/*.spec.tsx",
+      "src/**/*.spec.ts"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "A new test file has been created. Please run the command `npm run release` to complete the process."
+  }
+}

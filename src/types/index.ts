@@ -158,29 +158,6 @@ export interface AsyncState<T> {
 
 // Component Props Types
 
-export interface MapViewProps {
-  places: Place[];
-  onPlaceSelect: (place: Place) => void;
-  selectedPlace?: Place;
-}
-
-export interface PlacesListProps {
-  places: Place[];
-  onPlaceSelect: (place: Place) => void;
-}
-
-export interface ChallengesListProps {
-  challenges: Challenge[];
-  onJoinChallenge: (challengeId: string) => void;
-  onCreateChallenge: () => void;
-}
-
-export interface ChallengeFormProps {
-  place: Place;
-  onSubmit: (challenge: CreateChallengeRequest) => void;
-  onCancel: () => void;
-}
-
 export interface PlayerProfileProps {
   player: Player;
   onUpdateProfile: (updates: Partial<Player>) => void;

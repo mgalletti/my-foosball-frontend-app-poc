@@ -18,5 +18,5 @@ export { default as ChallengesList } from './ChallengesList';
 // Re-export component types for convenience
 export type { PlacesListProps } from './PlacesList';
 export type { ChallengeFormProps } from './ChallengeForm';
-export type { ChallengesListProps } from '../types';
+export type { ChallengesListProps } from './ChallengesList';
 export type { MobileLayoutProps } from './MobileLayout';
