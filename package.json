@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "description": "A mobile-first React application for foosball players to discover locations and create challenges",
+  "author": "Foosball Challenge App Team",
+  "homepage": "https://github.com/your-username/foosball-app",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

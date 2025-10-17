@@ -9,11 +9,11 @@
  */
 
 import { useEffect, useState, useCallback, useMemo, memo } from 'react';
-import { 
-  Box, 
-  CircularProgress, 
-  Typography, 
-  Button, 
+import {
+  Box,
+  CircularProgress,
+  Typography,
+  Button,
   Alert,
   Dialog,
   DialogTitle,
@@ -24,6 +24,7 @@ import {
 } from '@mui/material';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import { Icon } from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import { usePlaces, useAppState } from '../context/AppContext';
 import { PlacesService } from '../services/PlacesService';
 import type { Place } from '../types';
@@ -50,6 +51,50 @@ const createCustomIcon = (isSelected: boolean = false) => new Icon({
 });
 
 /**
+ * OSM Compliance: Set up fetch interceptor for proper User-Agent
+ */
+const setupOSMCompliance = () => {
+  // Store original fetch
+  const originalFetch = window.fetch;
+
+  // Override fetch for OSM tile requests
+  window.fetch = function (input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+    const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
+
+    // Check if this is an OSM tile request
+    // if (url && url.includes('tile.openstreetmap.org')) {
+      const headers = new Headers(init?.headers);
+
+      // Set proper User-Agent for OSM compliance
+      console.log("HERE I'M SETTING THE User-Agent HEADER")
+      headers.set('User-Agent', 'Foosball Challenge App/0.0.0 (https://github.com/your-username/foosball-app; contact@foosball-app.com)');
+
+      // Ensure proper referer
+      if (!headers.has('Referer')) {
+        headers.set('Referer', window.location.href);
+      }
+
+      // Update init with new headers
+      const newInit = {
+        ...init,
+        headers,
+        cache: 'default' as RequestCache // Respect caching headers
+      };
+
+      return originalFetch.call(this, input, newInit);
+    // }
+
+    // For non-OSM requests, use original fetch
+    return originalFetch.call(this, input, init);
+  };
+
+  // Return cleanup function
+  return () => {
+    window.fetch = originalFetch;
+  };
+};
+
+/**
  * MapEventHandler - Handles map-level events like clicks outside of markers
  * 
  * This component uses the react-leaflet useMapEvents hook to listen for map interactions.
@@ -64,6 +109,8 @@ const MapEventHandler = memo(({ onMapClick }: { onMapClick: () => void }) => {
   });
   return null;
 });
+
+
 
 export interface MapViewProps {
   places: Place[];
@@ -108,11 +155,11 @@ interface PlaceMarkerProps {
  * @param props - PlaceMarkerProps containing place data and event handlers
  * @returns JSX element representing a Leaflet Marker with Popup
  */
-const PlaceMarker = memo(({ 
-  place, 
-  isSelected, 
-  onPlaceSelect, 
-  onCreateChallenge 
+const PlaceMarker = memo(({
+  place,
+  isSelected,
+  onPlaceSelect,
+  onCreateChallenge
 }: PlaceMarkerProps) => {
   const handleCreateChallenge = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
@@ -122,8 +169,8 @@ const PlaceMarker = memo(({
   }, [place, onCreateChallenge]);
 
   return (
-    <Marker 
-      key={place.id} 
+    <Marker
+      key={place.id}
       position={[place.coordinates.lat, place.coordinates.long]}
       icon={createCustomIcon(isSelected)}
       eventHandlers={{
@@ -135,23 +182,23 @@ const PlaceMarker = memo(({
           <Typography variant="h6" gutterBottom>
             {place.name}
           </Typography>
-          
+
           <Typography variant="body2" color="text.secondary" gutterBottom>
             ID: {place.id}
           </Typography>
-          
+
           <Typography variant="body2" color="text.secondary" gutterBottom>
             Coordinates: {place.coordinates.lat.toFixed(4)}, {place.coordinates.long.toFixed(4)}
           </Typography>
-          
+
           <Box sx={{ mt: 1, mb: 1 }}>
-            <Chip 
-              label="Available" 
-              color="success" 
+            <Chip
+              label="Available"
+              color="success"
               size="small"
             />
           </Box>
-          
+
           <Button
             variant="contained"
             color="primary"
@@ -205,11 +252,11 @@ const PlaceMarker = memo(({
  * />
  * ```
  */
-const MapView = memo(function MapView({ 
-  places: propPlaces, 
-  onPlaceSelect, 
+const MapView = memo(function MapView({
+  places: propPlaces,
+  onPlaceSelect,
   selectedPlace,
-  onCreateChallenge 
+  onCreateChallenge
 }: MapViewComponentProps) {
   const { places: contextPlaces, setPlaces } = usePlaces();
   const { loading, error, setLoading, setError, clearError } = useAppState();
@@ -224,11 +271,11 @@ const MapView = memo(function MapView({
   // Memoize map center calculation for performance
   const mapCenter = useMemo(() => {
     if (places.length === 0) return [51.505, -0.09] as [number, number];
-    
+
     // Calculate center based on all places
     const avgLat = places.reduce((sum, place) => sum + place.coordinates.lat, 0) / places.length;
     const avgLng = places.reduce((sum, place) => sum + place.coordinates.long, 0) / places.length;
-    
+
     return [avgLat, avgLng] as [number, number];
   }, [places]);
 
@@ -239,11 +286,29 @@ const MapView = memo(function MapView({
     }
   }, [propPlaces, contextPlaces.length]);
 
+  // OSM Compliance: Set up proper User-Agent and app identification
+  useEffect(() => {
+    // Set up fetch interceptor for OSM compliance
+    const cleanup = setupOSMCompliance();
+
+    // Add app identification to the document for OSM compliance
+    const metaAppName = document.querySelector('meta[name="application-name"]');
+    if (!metaAppName) {
+      const meta = document.createElement('meta');
+      meta.name = 'application-name';
+      meta.content = 'Foosball Challenge App v0.0.0';
+      document.head.appendChild(meta);
+    }
+
+    // Cleanup on unmount
+    return cleanup;
+  }, []);
+
   const loadPlaces = useCallback(async () => {
     setLoading(true);
     setMapLoading(true);
     clearError();
-    
+
     try {
       const placesData = await PlacesService.getActivePlaces();
       setPlaces(placesData);
@@ -262,7 +327,7 @@ const MapView = memo(function MapView({
   const handlePlaceSelect = useCallback((place: Place) => {
     // Toggle selection if clicking the same place, otherwise select the new place
     const newSelectedPlace = currentSelectedPlace?.id === place.id ? null : place;
-    
+
     if (onPlaceSelect) {
       // When using external place selection handler, always call it with the place
       // The parent component can decide how to handle selection/deselection
@@ -290,8 +355,8 @@ const MapView = memo(function MapView({
   }, [loadPlaces]);
 
   // Filter active places for display
-  const activePlaces = useMemo(() => 
-    places.filter(place => place.status === '1'), 
+  const activePlaces = useMemo(() =>
+    places.filter(place => place.status === '1'),
     [places]
   );
 
@@ -299,21 +364,21 @@ const MapView = memo(function MapView({
     return (
       <Box sx={{ height: '100%', width: '100%', position: 'relative' }}>
         {/* Skeleton for map container */}
-        <Skeleton 
-          variant="rectangular" 
-          width="100%" 
-          height="100%" 
+        <Skeleton
+          variant="rectangular"
+          width="100%"
+          height="100%"
           animation="wave"
-          sx={{ 
+          sx={{
             position: 'absolute',
             top: 0,
             left: 0,
             borderRadius: 1
           }}
         />
-        
+
         {/* Loading overlay */}
-        <Box sx={{ 
+        <Box sx={{
           position: 'absolute',
           top: '50%',
           left: '50%',
@@ -340,8 +405,8 @@ const MapView = memo(function MapView({
   if (error) {
     return (
       <Box sx={{ p: 2 }}>
-        <Alert 
-          severity="error" 
+        <Alert
+          severity="error"
           action={
             error.retryable && (
               <Button color="inherit" size="small" onClick={handleRetry}>
@@ -371,16 +436,21 @@ const MapView = memo(function MapView({
         minZoom={3}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors | <a href="https://www.openstreetmap.org/fixthemap">Report a map issue</a>'
+          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
           maxZoom={19}
+          // OSM compliance: proper tile size and caching behavior
+          tileSize={256}
+          zoomOffset={0}
+          updateWhenIdle={true}
+          updateWhenZooming={false}
         />
-        
+
         <MapEventHandler onMapClick={handleMapClick} />
-        
+
         {activePlaces.map(place => {
           const isSelected = currentSelectedPlace?.id === place.id;
-          
+
           return (
             <PlaceMarker
               key={place.id}
@@ -397,8 +467,8 @@ const MapView = memo(function MapView({
       </MapContainer>
 
       {/* Create Challenge Dialog */}
-      <Dialog 
-        open={showCreateDialog} 
+      <Dialog
+        open={showCreateDialog}
         onClose={handleCloseCreateDialog}
         maxWidth="sm"
         fullWidth

@@ -141,11 +141,13 @@ const validateChallengeForm = (data: ChallengeFormData): ValidationErrors<Challe
   if (!data.date) {
     errors.date = 'Date is required';
   } else {
-    const selectedDate = new Date(data.date);
+    // Parse the date string as local date to avoid timezone issues
+    const dateParts = data.date.split('-');
+    const selectedDate = new Date(parseInt(dateParts[0]), parseInt(dateParts[1]) - 1, parseInt(dateParts[2]));
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Reset time to start of day for accurate comparison
 
-    // Prevent scheduling challenges in the past
+    // Prevent scheduling challenges in the past (but allow today)
     if (selectedDate < today) {
       errors.date = 'Date cannot be in the past';
     }
@@ -153,6 +155,7 @@ const validateChallengeForm = (data: ChallengeFormData): ValidationErrors<Challe
     // Prevent scheduling too far in advance (business rule: max 30 days)
     const maxDate = new Date();
     maxDate.setDate(maxDate.getDate() + 30);
+    maxDate.setHours(0, 0, 0, 0); // Set to start of day for comparison
     if (selectedDate > maxDate) {
       errors.date = 'Date cannot be more than 30 days in the future';
     }

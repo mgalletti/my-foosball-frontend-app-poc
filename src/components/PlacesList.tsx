@@ -491,10 +491,11 @@ export function PlacesList({
 
                     <ListItemText
                       primary={
-                        <Box display="flex" alignItems="center" gap={1}>
+                        <React.Fragment>
                           <Typography variant="subtitle1" component="span">
                             {place.name}
                           </Typography>
+                          {' '}
                           <Chip
                             icon={isActive ? <ActiveIcon /> : <InactiveIcon />}
                             label={isActive ? 'Active' : 'Inactive'}
@@ -502,19 +503,19 @@ export function PlacesList({
                             color={isActive ? 'success' : 'default'}
                             variant="outlined"
                           />
-                        </Box>
+                        </React.Fragment>
                       }
                       secondary={
-                        <Box>
-                          <Typography variant="body2" color="text.secondary">
+                        <React.Fragment>
+                          <Typography variant="body2" color="text.secondary" component="div">
                             {formatCoordinates(place.coordinates.lat, place.coordinates.long)}
                           </Typography>
                           {activeChallengesCount > 0 && (
-                            <Typography variant="body2" color="primary">
+                            <Typography variant="body2" color="primary" component="div">
                               {activeChallengesCount} active challenge{activeChallengesCount !== 1 ? 's' : ''}
                             </Typography>
                           )}
-                        </Box>
+                        </React.Fragment>
                       }
                     />
 

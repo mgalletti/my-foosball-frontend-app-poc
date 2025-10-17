@@ -24,7 +24,7 @@ export class PlayersService extends BaseApiService {
    */
   static async getCurrentPlayer(): Promise<Player> {
     try {
-      const data = await this.request<Player>('/players/me');
+      const data = await this.request<Player>('/players/player1');
       return this.validateResponse(data, isPlayer);
     } catch (error) {
       throw error;

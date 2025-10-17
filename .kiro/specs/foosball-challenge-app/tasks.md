@@ -66,7 +66,7 @@
   - Write tests for challenge display and join functionality
   - _Requirements: 4.1, 4.2, 4.3, 4.4_
 
-- [ ] 9. Implement PlayerProfile component
+- [x] 9. Implement PlayerProfile component
   - Create profile display component showing player ID, name, expertise, and points
   - Add profile editing functionality for updatable fields
   - Implement expertise level tracking and points system
@@ -75,7 +75,7 @@
   - Write tests for profile display and editing
   - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5_
 
-- [ ] 10. Create main App component with section routing
+- [x] 10. Create main App component with section routing
   - Update App.tsx to integrate all components with section-based navigation
   - Implement section switching logic (Home, Profile, Places, Challenges)
   - Add global state providers and context initialization

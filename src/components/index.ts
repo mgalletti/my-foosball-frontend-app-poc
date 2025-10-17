@@ -14,9 +14,11 @@ export { default as MobileLayout } from './MobileLayout';
 export { default as PlacesList } from './PlacesList';
 export { default as ChallengeForm } from './ChallengeForm';
 export { default as ChallengesList } from './ChallengesList';
+export { default as PlayerProfile } from './PlayerProfile';
 
 // Re-export component types for convenience
 export type { PlacesListProps } from './PlacesList';
 export type { ChallengeFormProps } from './ChallengeForm';
 export type { ChallengesListProps } from './ChallengesList';
+export type { PlayerProfileProps } from './PlayerProfile';
 export type { MobileLayoutProps } from './MobileLayout';

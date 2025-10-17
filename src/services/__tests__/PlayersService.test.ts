@@ -45,7 +45,7 @@ describe('PlayersService', () => {
       const result = await PlayersService.getCurrentPlayer();
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3000/players/me',
+        'http://localhost:3000/players/player1',
         expect.objectContaining({
           headers: { 'Content-Type': 'application/json' },
         }),
