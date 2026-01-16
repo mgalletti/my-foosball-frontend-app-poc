@@ -595,7 +595,7 @@ const ChallengeForm: React.FC<ChallengeFormProps> = ({
                 onClose={handleBlur('time')}
                 label="Time Slot"
               >
-                <MenuItem value="Morning">
+                <MenuItem value="MORNING">
                   <Box display="flex" alignItems="center" gap={1}>
                     <TimeIcon sx={{ mr: 1, color: 'action.active' }} />
                     <Box>
@@ -606,7 +606,7 @@ const ChallengeForm: React.FC<ChallengeFormProps> = ({
                     </Box>
                   </Box>
                 </MenuItem>
-                <MenuItem value="Afternoon">
+                <MenuItem value="AFTERNOON">
                   <Box display="flex" alignItems="center" gap={1}>
                     <TimeIcon sx={{ mr: 1, color: 'action.active' }} />
                     <Box>
@@ -617,7 +617,7 @@ const ChallengeForm: React.FC<ChallengeFormProps> = ({
                     </Box>
                   </Box>
                 </MenuItem>
-                <MenuItem value="Evening">
+                <MenuItem value="EVENING">
                   <Box display="flex" alignItems="center" gap={1}>
                     <TimeIcon sx={{ mr: 1, color: 'action.active' }} />
                     <Box>

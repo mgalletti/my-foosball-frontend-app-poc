@@ -172,6 +172,8 @@ export interface PlacesListProps {
   loading?: boolean;
   /** Error message to display */
   error?: string;
+  /** Optional callback for creating a challenge at a place */
+  onCreateChallenge?: (place: Place) => void;
 }
 
 /**
@@ -198,7 +200,8 @@ export function PlacesList({
   onPlaceSelect,
   selectedPlace,
   loading = false,
-  error
+  error,
+  onCreateChallenge
 }: PlacesListProps) {
   // Local state for search and filtering
   const [searchTerm, setSearchTerm] = useState('');
@@ -250,6 +253,24 @@ export function PlacesList({
     return challenges.filter(
       challenge => challenge?.place?.id === placeId && challenge.status === 'Open'
     );
+  };
+
+  /**
+   * Get user-friendly time slot name for display
+   * 
+   * Converts backend enum values (MORNING, AFTERNOON, EVENING) to
+   * user-friendly display names (Morning, Afternoon, Evening).
+   * 
+   * @param {string} timeSlot - The backend time slot enum value
+   * @returns {string} User-friendly time slot name
+   */
+  const getTimeSlotName = (timeSlot: string): string => {
+    const nameMap = {
+      'MORNING': 'Morning',
+      'AFTERNOON': 'Afternoon',
+      'EVENING': 'Evening'
+    };
+    return nameMap[timeSlot as keyof typeof nameMap] || timeSlot;
   };
 
   /**
@@ -567,6 +588,32 @@ export function PlacesList({
                           </Box>
                         </Box>
 
+                        {/* Create Challenge Button */}
+                        {isActive && onCreateChallenge && (
+                          <Box>
+                            <Typography variant="body2" color="text.secondary" gutterBottom>
+                              Actions
+                            </Typography>
+                            <Box>
+                              <Typography
+                                variant="body2"
+                                color="primary"
+                                sx={{ 
+                                  cursor: 'pointer', 
+                                  textDecoration: 'underline',
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: 0.5
+                                }}
+                                onClick={() => onCreateChallenge(place)}
+                              >
+                                <ChallengeIcon fontSize="small" />
+                                Create Challenge
+                              </Typography>
+                            </Box>
+                          </Box>
+                        )}
+
                         {/* Active Challenges */}
                         {activeChallenges.length > 0 && (
                           <Box>
@@ -584,7 +631,7 @@ export function PlacesList({
                                       </Typography>
                                     </Box>
                                     <Typography variant="body2" color="text.secondary">
-                                      {new Date(challenge.date).toLocaleDateString()} • {challenge.time}
+                                      {new Date(challenge.date).toLocaleDateString()} • {getTimeSlotName(challenge.time)}
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary">
                                       Owner: {challenge.owner.name} • {challenge.players.length} player{challenge.players.length !== 1 ? 's' : ''}

@@ -92,11 +92,21 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
   // Get time slot display with icon
   const getTimeSlotDisplay = (timeSlot: string) => {
     const timeMap = {
-      'Morning': '8:00 AM - 12:00 PM',
-      'Afternoon': '12:00 PM - 6:00 PM',
-      'Evening': '6:00 PM - 10:00 PM'
+      'MORNING': '8:00 AM - 12:00 PM',
+      'AFTERNOON': '12:00 PM - 6:00 PM',
+      'EVENING': '6:00 PM - 10:00 PM'
     };
     return timeMap[timeSlot as keyof typeof timeMap] || timeSlot;
+  };
+
+  // Get user-friendly time slot name
+  const getTimeSlotName = (timeSlot: string) => {
+    const nameMap = {
+      'MORNING': 'Morning',
+      'AFTERNOON': 'Afternoon',
+      'EVENING': 'Evening'
+    };
+    return nameMap[timeSlot as keyof typeof nameMap] || timeSlot;
   };
 
   // Get expertise color
@@ -159,7 +169,7 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
             <TimeIcon color="action" fontSize="small" />
             <Box>
               <Typography variant="body2" fontWeight="medium">
-                {challenge.time}
+                {getTimeSlotName(challenge.time)}
               </Typography>
               <Typography variant="caption" color="text.secondary">
                 {getTimeSlotDisplay(challenge.time)}

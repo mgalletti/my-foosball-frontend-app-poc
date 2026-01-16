@@ -53,7 +53,7 @@ const mockOpenChallenge: Challenge = {
   name: 'Friday Night Showdown',
   place: mockPlace,
   date: '2024-12-25',
-  time: 'Evening',
+  time: 'EVENING',
   status: 'Open',
   owner: mockOwner,
   players: [
@@ -77,7 +77,7 @@ const mockClosedChallenge: Challenge = {
   name: 'Closed Challenge',
   place: mockPlace,
   date: '2024-12-26',
-  time: 'Morning',
+  time: 'MORNING',
   status: 'Closed',
   owner: mockOwner,
   players: []
@@ -88,7 +88,7 @@ const mockChallengeWithCurrentPlayer: Challenge = {
   name: 'Already Joined Challenge',
   place: mockPlace,
   date: '2024-12-27',
-  time: 'Afternoon',
+  time: 'AFTERNOON',
   status: 'Closed', // Make this closed so it doesn't appear in open challenges
   owner: mockOwner,
   players: [mockPlayer] // Current player is already in this challenge

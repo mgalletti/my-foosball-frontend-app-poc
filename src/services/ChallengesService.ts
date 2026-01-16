@@ -37,7 +37,7 @@ const isChallenge = (data: any): data is Challenge => {
     typeof data.name === 'string' &&
     isPlace(data.place) &&
     typeof data.date === 'string' &&
-    ['Morning', 'Afternoon', 'Evening'].includes(data.time) &&
+    ['MORNING', 'AFTERNOON', 'EVENING'].includes(data.time) &&
     ['Open', 'Closed', 'Completed'].includes(data.status) &&
     isPlayer(data.owner) &&
     Array.isArray(data.players) &&
@@ -81,8 +81,8 @@ export class ChallengesService extends BaseApiService {
     if (!challenge.date || typeof challenge.date !== 'string') {
       throw new Error('Date is required and must be a string');
     }
-    if (!challenge.time || !['Morning', 'Afternoon', 'Evening'].includes(challenge.time)) {
-      throw new Error('Time is required and must be Morning, Afternoon, or Evening');
+    if (!challenge.time || !['MORNING', 'AFTERNOON', 'EVENING'].includes(challenge.time)) {
+      throw new Error('Time is required and must be MORNING, AFTERNOON, or EVENING');
     }
 
     try {

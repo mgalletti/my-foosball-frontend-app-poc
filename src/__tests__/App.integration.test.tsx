@@ -62,7 +62,7 @@ const mockChallenges: Challenge[] = [
     name: 'Test Challenge',
     place: mockPlaces[0],
     date: '2024-12-20',
-    time: 'Morning',
+    time: 'MORNING',
     status: 'Open',
     owner: mockPlayer,
     players: [mockPlayer]

@@ -148,13 +148,9 @@ const HomeSection = ({ onCreateChallenge }: HomeSectionProps) => {
   }).slice(0, 3); // Show only 3 most recent
 
   const handlePlaceSelect = useCallback((place: Place) => {
+    console.log('AppContent: handlePlaceSelect called with place:', place);
     setSelectedPlace(place);
   }, []);
-
-  const handleCreateChallengeFromMap = useCallback((place: Place) => {
-    setSelectedPlace(place);
-    onCreateChallenge(place);
-  }, [onCreateChallenge]);
 
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -164,7 +160,7 @@ const HomeSection = ({ onCreateChallenge }: HomeSectionProps) => {
           places={places}
           selectedPlace={selectedPlace || undefined}
           onPlaceSelect={handlePlaceSelect}
-          onCreateChallenge={handleCreateChallengeFromMap}
+          onCreateChallenge={onCreateChallenge}
         />
       </Box>
       
@@ -195,7 +191,7 @@ const HomeSection = ({ onCreateChallenge }: HomeSectionProps) => {
 const AppContent = () => {
   const { currentSection, setCurrentSection } = useNavigation();
   
-  const { error, setLoading, setError, clearError } = useAppState();
+  const { setLoading, setError, clearError } = useAppState();
   const { places, setPlaces } = usePlaces();
   const { challenges, setChallenges } = useChallenges();
   const { currentPlayer, setCurrentPlayer } = usePlayer();
@@ -253,9 +249,9 @@ const AppContent = () => {
     }
   }, [setPlaces, setChallenges, setCurrentPlayer, setLoading, clearError]);
 
-  const handleRetry = useCallback(() => {
-    initializeApp();
-  }, [initializeApp]);
+  const handlePlaceSelect = useCallback((_place: Place) => {
+    // For now, just log the selection - we can add more functionality later
+  }, []);
 
   const handleCreateChallenge = useCallback((place: Place) => {
     setSelectedPlaceForChallenge(place);
@@ -327,7 +323,8 @@ const AppContent = () => {
             </Typography>
             <PlacesList 
               places={places}
-              onPlaceSelect={handleCreateChallenge}
+              onPlaceSelect={handlePlaceSelect}
+              onCreateChallenge={handleCreateChallenge}
             />
           </Box>
         );

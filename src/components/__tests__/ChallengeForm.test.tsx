@@ -284,7 +284,7 @@ describe('ChallengeForm', () => {
     const validFormData = {
       name: 'Test Challenge',
       date: getFutureDateString(7),
-      time: 'Morning' as const
+      time: 'MORNING' as const
     };
 
     it('should submit form with valid data', async () => {
@@ -387,7 +387,7 @@ describe('ChallengeForm', () => {
     const validFormData = {
       name: 'Test Challenge',
       date: getFutureDateString(7),
-      time: 'Morning' as const
+      time: 'MORNING' as const
     };
 
     it('should handle validation errors from service', async () => {

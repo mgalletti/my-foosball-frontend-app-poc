@@ -59,8 +59,6 @@ const setupOSMCompliance = () => {
 
   // Override fetch for OSM tile requests
   window.fetch = function (input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
-    const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
-
     // Check if this is an OSM tile request
     // if (url && url.includes('tile.openstreetmap.org')) {
       const headers = new Headers(init?.headers);

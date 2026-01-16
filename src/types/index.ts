@@ -1,6 +1,6 @@
 // Core Data Models
 
-export type TimeSlot = 'Morning' | 'Afternoon' | 'Evening';
+export type TimeSlot = 'MORNING' | 'AFTERNOON' | 'EVENING';
 
 export interface Place {
   id: string;
@@ -24,7 +24,7 @@ export interface Challenge {
   name: string;
   place: Place;
   date: string; // ISO date string
-  time: TimeSlot; // "Morning" | "Afternoon" | "Evening"
+  time: TimeSlot; // "MORNING" | "AFTERNOON" | "EVENING"
   status: 'Open' | 'Closed' | 'Completed';
   owner: Player;
   players: Player[];

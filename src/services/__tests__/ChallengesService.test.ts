@@ -27,7 +27,7 @@ describe('ChallengesService', () => {
     name: 'Test Challenge',
     place: mockPlace,
     date: '2024-01-15',
-    time: 'Morning',
+    time: 'MORNING',
     status: 'Open',
     owner: mockPlayer,
     players: [mockPlayer],
@@ -86,7 +86,7 @@ describe('ChallengesService', () => {
       name: 'New Challenge',
       placeId: '1',
       date: '2024-01-15',
-      time: 'Morning',
+      time: 'MORNING',
     };
 
     it('should create a challenge successfully', async () => {
@@ -135,7 +135,7 @@ describe('ChallengesService', () => {
           ...validRequest,
           time: 'Invalid' as any,
         }),
-      ).rejects.toThrow('Time is required and must be Morning, Afternoon, or Evening');
+      ).rejects.toThrow('Time is required and must be MORNING, AFTERNOON, or EVENING');
     });
 
     it('should handle server validation errors', async () => {

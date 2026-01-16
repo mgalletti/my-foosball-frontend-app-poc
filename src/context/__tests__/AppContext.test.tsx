@@ -42,7 +42,7 @@ const mockChallenge: Challenge = {
     name: 'Test Challenge',
     place: mockPlace,
     date: '2024-01-15',
-    time: 'Morning',
+    time: 'MORNING',
     status: 'Open',
     owner: mockPlayer,
     players: [mockPlayer]
