@@ -123,14 +123,14 @@ describe('PlayerProfile Component', () => {
     });
 
     it('displays different expertise levels correctly', () => {
-      const novicePlayer = { ...mockPlayer, expertise: 'Novice' as const };
+      const novicePlayer = { ...mockPlayer, expertise: 'Beginner' as const };
       const { rerender } = render(
         <TestWrapper>
           <PlayerProfile {...defaultProps} player={novicePlayer} />
         </TestWrapper>
       );
 
-      expect(screen.getByText('Novice')).toBeInTheDocument();
+      expect(screen.getByText('Beginner')).toBeInTheDocument();
 
       const expertPlayer = { ...mockPlayer, expertise: 'Expert' as const };
       rerender(

@@ -1,5 +1,5 @@
 import type { Player, UpdatePlayerRequest } from '../types';
-import { BaseApiService } from './api';
+import { BaseApiService, ApiServiceError } from './api';
 
 // TODO: Re-enable lint violation when logging in catches is properly implemented
 /* eslint-disable no-useless-catch */
@@ -11,9 +11,20 @@ const isPlayer = (data: any): data is Player => {
     data !== null &&
     typeof data.id === 'string' &&
     typeof data.name === 'string' &&
-    ['Novice', 'Intermediate', 'Expert'].includes(data.expertise) &&
+    (['Beginner', 'Intermediate', 'Expert'].includes(data.expertise) ||
+     ['BEGINNER', 'INTERMEDIATE', 'EXPERT'].includes(data.expertise)) &&
     typeof data.points === 'number'
   );
+};
+
+// Helper function to normalize expertise from backend format
+const normalizeExpertise = (expertise: string): 'Beginner' | 'Intermediate' | 'Expert' => {
+  switch (expertise.toUpperCase()) {
+    case 'BEGINNER': return 'Beginner';
+    case 'INTERMEDIATE': return 'Intermediate';
+    case 'EXPERT': return 'Expert';
+    default: return 'Beginner'; // fallback
+  }
 };
 
 export class PlayersService extends BaseApiService {
@@ -24,9 +35,27 @@ export class PlayersService extends BaseApiService {
    */
   static async getCurrentPlayer(): Promise<Player> {
     try {
-      const data = await this.request<Player>('/players/player1');
-      return this.validateResponse(data, isPlayer);
+      const data = await this.request<any>('/players/player2');
+      const playerData = this.validateResponse(data, isPlayer);
+      
+      // Normalize the player data to match our frontend types
+      const player: Player = {
+        ...playerData,
+        expertise: normalizeExpertise(playerData.expertise)
+      };
+      
+      return player;
     } catch (error) {
+      // For development/demo purposes, return mock data if API fails
+      if (error instanceof ApiServiceError && error.status === 0) {
+        console.warn('API not available, returning mock player data for development');
+        return {
+          id: 'player2',
+          name: 'Demo Player',
+          expertise: 'Intermediate',
+          points: 150
+        };
+      }
       throw error;
     }
   }
@@ -42,8 +71,8 @@ export class PlayersService extends BaseApiService {
     if (updates.name !== undefined && (typeof updates.name !== 'string' || updates.name.trim().length === 0)) {
       throw new Error('Name must be a non-empty string');
     }
-    if (updates.expertise !== undefined && !['Novice', 'Intermediate', 'Expert'].includes(updates.expertise)) {
-      throw new Error('Expertise must be Novice, Intermediate, or Expert');
+    if (updates.expertise !== undefined && !['Beginner', 'Intermediate', 'Expert'].includes(updates.expertise)) {
+      throw new Error('Expertise must be Beginner, Intermediate, or Expert');
     }
     if (updates.points !== undefined && (typeof updates.points !== 'number' || updates.points < 0)) {
       throw new Error('Points must be a non-negative number');
@@ -85,8 +114,8 @@ export class PlayersService extends BaseApiService {
    * @returns Promise<Player[]> Array of players with the specified expertise
    */
   static async getPlayersByExpertise(expertise: Player['expertise']): Promise<Player[]> {
-    if (!expertise || !['Novice', 'Intermediate', 'Expert'].includes(expertise)) {
-      throw new Error('Expertise must be Novice, Intermediate, or Expert');
+    if (!expertise || !['Beginner', 'Intermediate', 'Expert'].includes(expertise)) {
+      throw new Error('Expertise must be Beginner, Intermediate, or Expert');
     }
 
     try {
@@ -156,8 +185,8 @@ export class PlayersService extends BaseApiService {
     if (!playerId || typeof playerId !== 'string') {
       throw new Error('Player ID is required and must be a string');
     }
-    if (!expertise || !['Novice', 'Intermediate', 'Expert'].includes(expertise)) {
-      throw new Error('Expertise must be Novice, Intermediate, or Expert');
+    if (!expertise || !['Beginner', 'Intermediate', 'Expert'].includes(expertise)) {
+      throw new Error('Expertise must be Beginner, Intermediate, or Expert');
     }
 
     try {

@@ -60,7 +60,7 @@ const mockOpenChallenge: Challenge = {
     {
       id: 'player-2',
       name: 'John Doe',
-      expertise: 'Novice',
+      expertise: 'Beginner',
       points: 50
     },
     {
@@ -246,11 +246,11 @@ describe('ChallengesList', () => {
       const challengeWithManyPlayers: Challenge = {
         ...mockOpenChallenge,
         players: [
-          { id: '1', name: 'Player One', expertise: 'Novice', points: 10 },
-          { id: '2', name: 'Player Two', expertise: 'Novice', points: 20 },
-          { id: '3', name: 'Player Three', expertise: 'Novice', points: 30 },
-          { id: '4', name: 'Player Four', expertise: 'Novice', points: 40 },
-          { id: '5', name: 'Player Five', expertise: 'Novice', points: 50 }
+          { id: '1', name: 'Player One', expertise: 'Beginner', points: 10 },
+          { id: '2', name: 'Player Two', expertise: 'Beginner', points: 20 },
+          { id: '3', name: 'Player Three', expertise: 'Beginner', points: 30 },
+          { id: '4', name: 'Player Four', expertise: 'Beginner', points: 40 },
+          { id: '5', name: 'Player Five', expertise: 'Beginner', points: 50 }
         ]
       };
 
@@ -486,9 +486,9 @@ describe('ChallengesList', () => {
     it('should display expertise levels with correct colors', () => {
       const challengeWithVariousExpertise: Challenge = {
         ...mockOpenChallenge,
-        owner: { ...mockOwner, expertise: 'Novice' },
+        owner: { ...mockOwner, expertise: 'Beginner' },
         players: [
-          { id: '1', name: 'Novice Player', expertise: 'Novice', points: 10 },
+          { id: '1', name: 'Beginner Player', expertise: 'Beginner', points: 10 },
           { id: '2', name: 'Expert Player', expertise: 'Expert', points: 1000 }
         ]
       };
@@ -500,7 +500,7 @@ describe('ChallengesList', () => {
 
       renderWithContext(<ChallengesList {...props} />);
 
-      expect(screen.getByText('Novice')).toBeInTheDocument();
+      expect(screen.getByText('Beginner')).toBeInTheDocument();
     });
   });
 
@@ -582,13 +582,13 @@ describe('ChallengesList', () => {
       renderWithContext(<ChallengesList {...defaultProps} />);
 
       // Find avatar by aria-label instead of text to avoid ambiguity
-      const avatar = screen.getByLabelText('John Doe (Novice)');
+      const avatar = screen.getByLabelText('John Doe (Beginner)');
 
       // Hover to show tooltip
       await user.hover(avatar);
 
       await waitFor(() => {
-        expect(screen.getByText('John Doe (Novice)')).toBeInTheDocument();
+        expect(screen.getByText('John Doe (Beginner)')).toBeInTheDocument();
       });
     });
 
@@ -598,7 +598,7 @@ describe('ChallengesList', () => {
         players: Array.from({ length: 6 }, (_, i) => ({
           id: `player-${i}`,
           name: `Player ${i + 1}`,
-          expertise: 'Novice' as const,
+          expertise: 'Beginner' as const,
           points: 10
         }))
       };

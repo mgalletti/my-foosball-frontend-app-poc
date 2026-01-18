@@ -14,12 +14,12 @@ import { useEffect, useState, useCallback, Suspense, Component } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CssBaseline, Box, CircularProgress, Alert, Button, Typography } from '@mui/material';
 import { AppProvider, useNavigation, useAppState, usePlaces, useChallenges, usePlayer } from './context/AppContext';
-import { 
-  MobileLayout, 
-  PlacesList, 
-  ChallengesList, 
-  ChallengeForm, 
-  PlayerProfile 
+import {
+  MobileLayout,
+  PlacesList,
+  ChallengesList,
+  ChallengeForm,
+  PlayerProfile
 } from './components';
 import MapView from './components/MapView';
 import { PlacesService } from './services/PlacesService';
@@ -94,8 +94,8 @@ class AppErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState>
           <Alert severity="error" sx={{ mb: 2 }}>
             Something went wrong. Please refresh the page to try again.
           </Alert>
-          <Button 
-            variant="contained" 
+          <Button
+            variant="contained"
             onClick={() => window.location.reload()}
           >
             Refresh Page
@@ -112,10 +112,10 @@ class AppErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState>
  * Loading component for app initialization
  */
 const AppLoading = () => (
-  <Box sx={{ 
-    display: 'flex', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
+  <Box sx={{
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     height: '100vh',
     flexDirection: 'column',
     gap: 2
@@ -148,7 +148,6 @@ const HomeSection = ({ onCreateChallenge }: HomeSectionProps) => {
   }).slice(0, 3); // Show only 3 most recent
 
   const handlePlaceSelect = useCallback((place: Place) => {
-    console.log('AppContent: handlePlaceSelect called with place:', place);
     setSelectedPlace(place);
   }, []);
 
@@ -163,7 +162,7 @@ const HomeSection = ({ onCreateChallenge }: HomeSectionProps) => {
           onCreateChallenge={onCreateChallenge}
         />
       </Box>
-      
+
       {/* Quick stats and actions */}
       <Box sx={{ p: 2, backgroundColor: 'background.paper', borderTop: 1, borderColor: 'divider' }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
@@ -172,7 +171,7 @@ const HomeSection = ({ onCreateChallenge }: HomeSectionProps) => {
             <Box sx={{ fontSize: '0.8rem', color: 'text.secondary' }}>Places</Box>
           </Box>
           <Box sx={{ textAlign: 'center' }}>
-            <Box sx={{ fontWeight: 'bold', fontSize: '1.2rem' }}>{challenges.filter(c => c.status === 'Open').length}</Box>
+            <Box sx={{ fontWeight: 'bold', fontSize: '1.2rem' }}>{challenges.filter(c => c.status.toLowerCase() === 'open').length}</Box>
             <Box sx={{ fontSize: '0.8rem', color: 'text.secondary' }}>Open Challenges</Box>
           </Box>
           <Box sx={{ textAlign: 'center' }}>
@@ -211,7 +210,8 @@ const AppContent = () => {
       // Load initial data in parallel, but don't fail the entire app if some fail
       const [placesData, challengesData, playerData] = await Promise.allSettled([
         PlacesService.getActivePlaces(),
-        ChallengesService.getOpenChallenges(),
+        // ChallengesService.getOpenChallenges(),
+        ChallengesService.getChallenges(),
         PlayersService.getCurrentPlayer()
       ]);
 
@@ -259,10 +259,18 @@ const AppContent = () => {
   }, []);
 
   const handleChallengeFormSubmit = useCallback(async () => {
-    // This will be handled by the ChallengeForm component
+    // Challenge was created successfully, refresh the challenges list
+    try {
+      const updatedChallenges = await ChallengesService.getOpenChallenges();
+      setChallenges(updatedChallenges);
+    } catch (err) {
+      console.warn('Failed to refresh challenges after creation:', err);
+      // Don't show error to user since the challenge was created successfully
+    }
+
     setShowChallengeForm(false);
     setSelectedPlaceForChallenge(null);
-  }, []);
+  }, [setChallenges]);
 
   const handleChallengeFormCancel = useCallback(() => {
     setShowChallengeForm(false);
@@ -271,11 +279,11 @@ const AppContent = () => {
 
   const handleJoinChallenge = useCallback(async (challengeId: string) => {
     if (!currentPlayer) return;
-    
+
     try {
       setLoading(true);
       await ChallengesService.joinChallenge(challengeId, currentPlayer.id);
-      
+
       // Refresh challenges to get updated data
       const updatedChallenges = await ChallengesService.getOpenChallenges();
       setChallenges(updatedChallenges);
@@ -310,39 +318,39 @@ const AppContent = () => {
 
   // Render current section content
   const renderSectionContent = () => {
-    
+
     switch (currentSection) {
       case 'home':
         return <HomeSection onCreateChallenge={handleCreateChallenge} />;
-      
+
       case 'places':
         return (
           <Box>
             <Typography variant="h6" sx={{ p: 2 }}>
               Places Section (Debug: {places.length} places)
             </Typography>
-            <PlacesList 
+            <PlacesList
               places={places}
               onPlaceSelect={handlePlaceSelect}
               onCreateChallenge={handleCreateChallenge}
             />
           </Box>
         );
-      
+
       case 'challenges':
         return (
           <Box>
             <Typography variant="h6" sx={{ p: 2 }}>
               Challenges Section (Debug: {challenges.length} challenges)
             </Typography>
-            <ChallengesList 
+            <ChallengesList
               challenges={challenges}
               onJoinChallenge={handleJoinChallenge}
               onCreateChallenge={() => setCurrentSection('places')}
             />
           </Box>
         );
-      
+
       case 'profile':
         return (
           <Box>
@@ -350,7 +358,7 @@ const AppContent = () => {
               Profile Section (Debug: Player {currentPlayer ? 'found' : 'not found'})
             </Typography>
             {currentPlayer ? (
-              <PlayerProfile 
+              <PlayerProfile
                 player={currentPlayer}
                 onUpdateProfile={handleUpdateProfile}
               />
@@ -363,7 +371,7 @@ const AppContent = () => {
             )}
           </Box>
         );
-      
+
       default:
         return <HomeSection onCreateChallenge={handleCreateChallenge} />;
     }
@@ -374,7 +382,7 @@ const AppContent = () => {
       <Suspense fallback={<AppLoading />}>
         {renderSectionContent()}
       </Suspense>
-      
+
       {/* Challenge Form Dialog */}
       {showChallengeForm && selectedPlaceForChallenge && (
         <ChallengeForm

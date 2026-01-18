@@ -43,6 +43,7 @@ import type {
   ErrorState
 } from '../types';
 import { ChallengesService } from '../services';
+import { usePlayer } from '../context/AppContext';
 
 /**
  * Props interface for the ChallengeForm component
@@ -121,7 +122,7 @@ export interface ChallengeFormProps {
  * 
  * ### Time Slot
  * - Required: Must select one of the available time slots
- * - Must be one of: 'Morning', 'Afternoon', 'Evening'
+ * - Must be one of: 'Morning', 'Afternoon', 'Evening', 'Night'
  */
 const validateChallengeForm = (data: ChallengeFormData): ValidationErrors<ChallengeFormData> => {
   const errors: ValidationErrors<ChallengeFormData> = {};
@@ -221,6 +222,9 @@ const ChallengeForm: React.FC<ChallengeFormProps> = ({
   onCancel,
   open = true
 }) => {
+  // Get current player
+  const { currentPlayer } = usePlayer();
+
   // Form state
   const [formData, setFormData] = useState<ChallengeFormData>({
     name: '',
@@ -379,6 +383,16 @@ const ChallengeForm: React.FC<ChallengeFormProps> = ({
     event.preventDefault();
     setSubmitError(null);
 
+    // Check if current player is available
+    if (!currentPlayer) {
+      setSubmitError({
+        type: 'validation',
+        message: 'You must be logged in to create a challenge',
+        retryable: false
+      });
+      return;
+    }
+
     // Validate form before proceeding
     if (!validateForm()) {
       return;
@@ -387,12 +401,13 @@ const ChallengeForm: React.FC<ChallengeFormProps> = ({
     setIsSubmitting(true);
 
     try {
-      // Create the challenge request object with trimmed name
+      // Create the challenge request object with trimmed name and current player as owner
       const challengeRequest: CreateChallengeRequest = {
         name: formData.name.trim(),
         placeId: place.id,
         date: formData.date,
-        time: formData.time
+        time: formData.time,
+        ownerId: currentPlayer.id
       };
 
       // Call the service to create the challenge
@@ -440,7 +455,7 @@ const ChallengeForm: React.FC<ChallengeFormProps> = ({
     } finally {
       setIsSubmitting(false);
     }
-  }, [formData, place.id, onSubmit, validateForm]);
+  }, [formData, place.id, onSubmit, validateForm, currentPlayer]);
 
   /**
    * Handle form cancellation and cleanup

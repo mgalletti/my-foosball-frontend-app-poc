@@ -25,8 +25,8 @@ describe('PlayersService', () => {
     },
     {
       id: '3',
-      name: 'Novice Player',
-      expertise: 'Novice',
+      name: 'Beginner Player',
+      expertise: 'Beginner',
       points: 10,
     },
   ];
@@ -39,18 +39,18 @@ describe('PlayersService', () => {
     it('should fetch current player successfully', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: () => Promise.resolve(mockPlayer),
+        json: () => Promise.resolve({ ...mockPlayer, expertise: 'BEGINNER' }),
       });
 
       const result = await PlayersService.getCurrentPlayer();
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3000/players/player1',
+        'http://localhost:3000/players/player2',
         expect.objectContaining({
           headers: { 'Content-Type': 'application/json' },
         }),
       );
-      expect(result).toEqual(mockPlayer);
+      expect(result).toEqual({ ...mockPlayer, expertise: 'Beginner' });
     });
 
     it('should handle network errors', async () => {
@@ -132,7 +132,7 @@ describe('PlayersService', () => {
         PlayersService.updatePlayer({
           expertise: 'Invalid' as any,
         }),
-      ).rejects.toThrow('Expertise must be Novice, Intermediate, or Expert');
+      ).rejects.toThrow('Expertise must be Beginner, Intermediate, or Expert');
     });
 
     it('should validate points field', async () => {
@@ -240,10 +240,10 @@ describe('PlayersService', () => {
 
     it('should validate expertise parameter', async () => {
       await expect(PlayersService.getPlayersByExpertise('Invalid' as any)).rejects.toThrow(
-        'Expertise must be Novice, Intermediate, or Expert',
+        'Expertise must be Beginner, Intermediate, or Expert',
       );
       await expect(PlayersService.getPlayersByExpertise('' as any)).rejects.toThrow(
-        'Expertise must be Novice, Intermediate, or Expert',
+        'Expertise must be Beginner, Intermediate, or Expert',
       );
     });
 
@@ -379,7 +379,7 @@ describe('PlayersService', () => {
         'Player ID is required and must be a string',
       );
       await expect(PlayersService.updatePlayerExpertise('1', 'Invalid' as any)).rejects.toThrow(
-        'Expertise must be Novice, Intermediate, or Expert',
+        'Expertise must be Beginner, Intermediate, or Expert',
       );
     });
   });

@@ -186,7 +186,7 @@ interface CreateChallengeRequest {
 interface Player {
   id: string;
   name: string;
-  expertise: "Novice" | "Intermediate" | "Expert";
+  expertise: "Beginner" | "Intermediate" | "Expert";
   points: number;
 }
 ```

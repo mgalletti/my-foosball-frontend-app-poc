@@ -121,7 +121,7 @@ export interface PlayerProfileProps {
  * 
  * ### Expertise Level
  * - Required: Must select one of the available expertise levels
- * - Must be one of: 'Novice', 'Intermediate', 'Expert'
+ * - Must be one of: 'Beginner', 'Intermediate', 'Expert'
  */
 const validatePlayerProfile = (data: PlayerProfileFormData): ValidationErrors<PlayerProfileFormData> => {
   const errors: ValidationErrors<PlayerProfileFormData> = {};
@@ -146,7 +146,7 @@ const validatePlayerProfile = (data: PlayerProfileFormData): ValidationErrors<Pl
   // Ensures a valid expertise level is selected
   if (!data.expertise) {
     errors.expertise = 'Expertise level is required';
-  } else if (!['Novice', 'Intermediate', 'Expert'].includes(data.expertise)) {
+  } else if (!['Beginner', 'Intermediate', 'Expert'].includes(data.expertise)) {
     errors.expertise = 'Invalid expertise level';
   }
 
@@ -164,7 +164,7 @@ const validatePlayerProfile = (data: PlayerProfileFormData): ValidationErrors<Pl
  */
 const getExpertiseColor = (expertise: Player['expertise']): 'default' | 'primary' | 'secondary' | 'success' => {
   switch (expertise) {
-    case 'Novice':
+    case 'Beginner':
       return 'default';
     case 'Intermediate':
       return 'primary';
@@ -185,7 +185,7 @@ const getExpertiseColor = (expertise: Player['expertise']): 'default' | 'primary
  */
 const getExpertiseStars = (expertise: Player['expertise']): number => {
   switch (expertise) {
-    case 'Novice':
+    case 'Beginner':
       return 1;
     case 'Intermediate':
       return 2;
@@ -524,10 +524,10 @@ const PlayerProfile: React.FC<PlayerProfileProps> = ({
                   onClose={handleBlur('expertise')}
                   label="Expertise Level"
                 >
-                  <MenuItem value="Novice">
+                  <MenuItem value="Beginner">
                     <Box display="flex" alignItems="center" gap={1}>
-                      {renderStarRating('Novice')}
-                      <Typography>Novice</Typography>
+                      {renderStarRating('Beginner')}
+                      <Typography>Beginner</Typography>
                     </Box>
                   </MenuItem>
                   <MenuItem value="Intermediate">

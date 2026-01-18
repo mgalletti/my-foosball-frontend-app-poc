@@ -15,7 +15,7 @@ A mobile-first React application that connects foosball players by helping them 
 - Set preferred times (Morning, Afternoon, Evening) for games
 
 ### 👤 Player Profiles
-- Track your expertise level (Novice, Intermediate, Expert)
+- Track your expertise level (Beginner, Intermediate, Expert)
 - Accumulate points through challenge participation
 - View other players' profiles and skill levels
 

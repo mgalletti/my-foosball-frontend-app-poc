@@ -15,7 +15,7 @@ export interface Place {
 export interface Player {
   id: string;
   name: string;
-  expertise: 'Novice' | 'Intermediate' | 'Expert';
+  expertise: 'Beginner' | 'Intermediate' | 'Expert';
   points: number;
 }
 
@@ -37,6 +37,7 @@ export interface CreateChallengeRequest {
   placeId: string;
   date: string;
   time: TimeSlot;
+  ownerId: string;
 }
 
 export interface JoinChallengeRequest {
@@ -46,7 +47,7 @@ export interface JoinChallengeRequest {
 
 export interface UpdatePlayerRequest {
   name?: string;
-  expertise?: 'Novice' | 'Intermediate' | 'Expert';
+  expertise?: 'Beginner' | 'Intermediate' | 'Expert';
   points?: number;
 }
 
@@ -143,7 +144,7 @@ export interface ChallengeFormData {
 
 export interface PlayerProfileFormData {
   name: string;
-  expertise: 'Novice' | 'Intermediate' | 'Expert';
+  expertise: 'Beginner' | 'Intermediate' | 'Expert';
 }
 
 // Utility Types

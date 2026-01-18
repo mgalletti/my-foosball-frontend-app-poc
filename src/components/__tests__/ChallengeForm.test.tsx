@@ -21,6 +21,18 @@ vi.mock('../../services', () => ({
   }
 }));
 
+// Mock the usePlayer hook
+vi.mock('../../context/AppContext', () => ({
+  usePlayer: () => ({
+    currentPlayer: {
+      id: 'player2',
+      name: 'Test Player',
+      expertise: 'Intermediate',
+      points: 100
+    }
+  })
+}));
+
 const mockChallengesService = vi.mocked(ChallengesService);
 
 // Mock place data
@@ -296,7 +308,7 @@ describe('ChallengeForm', () => {
         date: validFormData.date,
         time: validFormData.time,
         status: 'Open',
-        owner: { id: 'player-1', name: 'Test Player', expertise: 'Novice', points: 0 },
+        owner: { id: 'player-1', name: 'Test Player', expertise: 'Beginner', points: 0 },
         players: []
       });
 
@@ -319,7 +331,8 @@ describe('ChallengeForm', () => {
           name: validFormData.name,
           placeId: mockPlace.id,
           date: validFormData.date,
-          time: validFormData.time
+          time: validFormData.time,
+          ownerId: 'player2'
         });
       });
 
@@ -327,7 +340,8 @@ describe('ChallengeForm', () => {
         name: validFormData.name,
         placeId: mockPlace.id,
         date: validFormData.date,
-        time: validFormData.time
+        time: validFormData.time,
+        ownerId: 'player2'
       });
     });
 

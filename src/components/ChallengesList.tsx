@@ -76,7 +76,7 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
   const isPlayerInChallenge = useMemo(() => {
     if (!currentPlayer) return false;
     return challenge.players.some(player => player.id === currentPlayer.id) ||
-           challenge.owner.id === currentPlayer.id;
+      challenge.owner.id === currentPlayer.id;
   }, [challenge.players, challenge.owner.id, currentPlayer]);
 
   // Format date for display
@@ -94,7 +94,8 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
     const timeMap = {
       'MORNING': '8:00 AM - 12:00 PM',
       'AFTERNOON': '12:00 PM - 6:00 PM',
-      'EVENING': '6:00 PM - 10:00 PM'
+      'EVENING': '6:00 PM - 10:00 PM',
+      'NIGHT': '10:00 PM - 02:00 AM',
     };
     return timeMap[timeSlot as keyof typeof timeMap] || timeSlot;
   };
@@ -104,7 +105,8 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
     const nameMap = {
       'MORNING': 'Morning',
       'AFTERNOON': 'Afternoon',
-      'EVENING': 'Evening'
+      'EVENING': 'Evening',
+      'NIGHT': 'Night',
     };
     return nameMap[timeSlot as keyof typeof nameMap] || timeSlot;
   };
@@ -112,13 +114,19 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
   // Get expertise color
   const getExpertiseColor = (expertise: string) => {
     switch (expertise) {
-      case 'NOVICE': return 'success';
-      case 'INTERMEDIATE': return 'warning';
-      case 'EXPERT': return 'error';
+      case 'BEGINNER':
+      case 'Beginner': return 'success';
+      case 'INTERMEDIATE':
+      case 'Intermediate': return 'warning';
+      case 'EXPERT':
+      case 'Expert': return 'error';
       default: return 'default';
     }
   };
-
+  const statusColor = 
+    challenge.status.toLowerCase() === 'open' ? 'info' :
+    challenge.status.toLowerCase() === 'active' ? 'success' :
+    'warning';
   return (
     <Card
       sx={{
@@ -137,12 +145,12 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
         <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={2}>
           <Box flex={1}>
             <Typography variant="h6" component="h3" gutterBottom>
-              {challenge.name}
+              {challenge.name} 
             </Typography>
             <Chip
               icon={<TrophyIcon />}
               label={challenge.status}
-              color="success"
+              color={statusColor}
               size="small"
               variant="outlined"
             />
@@ -233,7 +241,7 @@ const ChallengeCard: React.FC<ChallengeCardProps> = ({
                   </Tooltip>
                 ))}
               </AvatarGroup>
-              
+
               {/* Show first few player names */}
               <Typography variant="caption" color="text.secondary">
                 {challenge.players.slice(0, 3).map(p => p.name).join(', ')}
@@ -298,14 +306,14 @@ const ChallengesList: React.FC<ChallengesListProps> = ({
 }) => {
   const { currentPlayer } = usePlayer();
   const { setError } = useAppState();
-  
+
   // Local state for join operations
   const [joiningChallenges, setJoiningChallenges] = useState<Set<string>>(new Set());
   const [joinError, setJoinError] = useState<ErrorState | null>(null);
 
   // Filter challenges to show only open ones
   const openChallenges = useMemo(() => {
-    return challenges.filter(challenge => challenge.status === 'Open');
+    return challenges.filter(challenge => challenge.status.toLocaleLowerCase() === 'open');
   }, [challenges]);
 
   /**
@@ -334,7 +342,7 @@ const ChallengesList: React.FC<ChallengesListProps> = ({
       onJoinChallenge(challengeId);
     } catch (error) {
       console.error('Failed to join challenge:', error);
-      
+
       if (error instanceof Error) {
         if (error.message.includes('already joined')) {
           setJoinError({
@@ -408,7 +416,7 @@ const ChallengesList: React.FC<ChallengesListProps> = ({
       {/* Header */}
       <Box mb={3}>
         <Typography variant="h5" gutterBottom>
-          Open Challenges
+          {challenges.length} Challenges
         </Typography>
         <Typography variant="body2" color="text.secondary">
           {openChallenges.length} challenge{openChallenges.length !== 1 ? 's' : ''} available to join
@@ -428,7 +436,7 @@ const ChallengesList: React.FC<ChallengesListProps> = ({
 
       {/* Challenges List */}
       <Box>
-        {openChallenges.map((challenge) => (
+        {challenges.map((challenge) => (
           <ChallengeCard
             key={challenge.id}
             challenge={challenge}

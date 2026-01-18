@@ -50,7 +50,7 @@ const mockPlaces: Place[] = [
 ];
 
 const mockPlayer: Player = {
-  id: 'player1',
+  id: 'player2',
   name: 'Test Player',
   expertise: 'Intermediate',
   points: 100

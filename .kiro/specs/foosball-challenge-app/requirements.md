@@ -61,7 +61,7 @@ The Foosball Challenge App is a mobile application that allows players to discov
 
 1. WHEN accessing the Profile section THEN the system SHALL display the current player's information
 2. WHEN displaying player profile THEN the system SHALL show player ID, name, expertise level, and points
-3. WHEN a player participates in challenges THEN the system SHALL track their expertise as "Novice", "Intermediate", or "Expert"
+3. WHEN a player participates in challenges THEN the system SHALL track their expertise as "Beginner", "Intermediate", or "Expert"
 4. WHEN a player completes challenges THEN the system SHALL update their points accordingly
 5. WHEN viewing other players THEN the system SHALL display their name, expertise, and points
 

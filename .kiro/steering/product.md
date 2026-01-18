@@ -8,7 +8,7 @@ A mobile-first React application that connects foosball players by helping them 
 
 - **Interactive Map**: View foosball places on an interactive map with mobile-optimized touch controls
 - **Challenge Management**: Create and join challenges at available locations with time slot preferences
-- **Player Profiles**: Track expertise levels (Novice, Intermediate, Expert) and accumulate points
+- **Player Profiles**: Track expertise levels (Beginner, Intermediate, Expert) and accumulate points
 - **Mobile-First Design**: Responsive layout optimized for mobile devices with bottom navigation
 
 ### Target Users

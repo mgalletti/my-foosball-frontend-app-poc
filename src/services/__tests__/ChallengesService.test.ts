@@ -87,6 +87,7 @@ describe('ChallengesService', () => {
       placeId: '1',
       date: '2024-01-15',
       time: 'MORNING',
+      ownerId: 'player2'
     };
 
     it('should create a challenge successfully', async () => {
@@ -157,21 +158,21 @@ describe('ChallengesService', () => {
         json: () => Promise.resolve(mockChallenge),
       });
 
-      const result = await ChallengesService.joinChallenge('1', 'player1');
+      const result = await ChallengesService.joinChallenge('1', 'player2');
 
       expect(mockFetch).toHaveBeenCalledWith(
         'http://localhost:3000/challenges/1/join',
         expect.objectContaining({
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ challengeId: '1', playerId: 'player1' }),
+          body: JSON.stringify({ challengeId: '1', playerId: 'player2' }),
         }),
       );
       expect(result).toEqual(mockChallenge);
     });
 
     it('should validate required parameters', async () => {
-      await expect(ChallengesService.joinChallenge('', 'player1')).rejects.toThrow(
+      await expect(ChallengesService.joinChallenge('', 'player2')).rejects.toThrow(
         'Challenge ID is required and must be a string',
       );
       await expect(ChallengesService.joinChallenge('1', '')).rejects.toThrow(
